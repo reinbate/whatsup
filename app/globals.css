@@ -1,0 +1,134 @@
+@import "tailwindcss";
+
+/*
+  Traditional Japanese colours (和色).
+  Light = washi paper + sumi ink. Dark = sumi ink + washi text.
+*/
+:root {
+  --bg: #fbfaf5; /* 生成り kinari */
+  --surface: #fffffc; /* 胡粉 gofun */
+  --ink: #27221f; /* 墨 sumi */
+  --muted: #6e7466; /* 利休鼠 rikyū-nezumi */
+  --accent: #b7282e; /* 茜 akane */
+  --on-accent: #fffffc;
+  --accent-2: #165e83; /* 藍 ai */
+  --line: #e6dfc8; /* 白茶 shiracha */
+  --status: #fef4f4; /* 桜 sakura */
+  --hanko: #d0402a; /* 朱 shu, seal ink */
+  --shadow: 0 1px 2px rgb(39 34 31 / 0.04), 0 8px 24px -12px rgb(39 34 31 / 0.12);
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #1c1a19; /* 墨 sumi */
+    --surface: #2a2725; /* 黒橡 kurotsurubami */
+    --ink: #f3f0e7; /* 生成り kinari */
+    --muted: #a3a3a2; /* 銀鼠 gin-nezumi */
+    --accent: #f06c14; /* 朱 shu (a touch brighter for contrast) */
+    --on-accent: #1c1a19;
+    --accent-2: #00a3af; /* 浅葱 asagi */
+    --line: #3a3634;
+    --status: #2e2426;
+    --hanko: #e0533a;
+    --shadow: 0 1px 2px rgb(0 0 0 / 0.3), 0 8px 24px -12px rgb(0 0 0 / 0.5);
+    color-scheme: dark;
+  }
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-accent: var(--accent);
+  --color-on-accent: var(--on-accent);
+  --color-accent-2: var(--accent-2);
+  --color-line: var(--line);
+  --color-status: var(--status);
+  --color-hanko: var(--hanko);
+  --font-serif: var(--font-mincho), "Hiragino Mincho ProN", "Yu Mincho", serif;
+  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --shadow-soft: var(--shadow);
+}
+
+html {
+  -webkit-tap-highlight-color: transparent;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background-color: var(--bg);
+  background-image: url("/washi.png");
+  background-size: 240px 240px;
+  color: var(--ink);
+  font-family: var(--font-sans);
+  overscroll-behavior-y: none;
+}
+
+/* In the base layer so utility classes can override it. */
+@layer base {
+  :focus-visible {
+    outline: 2px solid var(--accent-2);
+    outline-offset: 2px;
+  }
+}
+
+.pt-safe {
+  padding-top: env(safe-area-inset-top);
+}
+.pb-safe {
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+/* Small, quick motion. Disabled for people who ask for reduced motion. */
+@keyframes heart-pop {
+  0% { transform: scale(1); }
+  40% { transform: scale(1.35); }
+  100% { transform: scale(1); }
+}
+@keyframes heart-burst {
+  0% { opacity: 0; transform: scale(0.4); }
+  20% { opacity: 0.95; transform: scale(1.1); }
+  70% { opacity: 0.95; transform: scale(1); }
+  100% { opacity: 0; transform: scale(1); }
+}
+@keyframes stamp {
+  0% { opacity: 0; transform: scale(1.8) rotate(-12deg); }
+  35% { opacity: 1; transform: scale(0.95) rotate(-4deg); }
+  45% { transform: scale(1) rotate(-4deg); }
+  80% { opacity: 1; transform: scale(1) rotate(-4deg); }
+  100% { opacity: 0; transform: scale(1) rotate(-4deg); }
+}
+@keyframes slide-up {
+  from { transform: translateY(16px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes shimmer {
+  0% { opacity: 0.55; }
+  50% { opacity: 1; }
+  100% { opacity: 0.55; }
+}
+.animate-heart-pop { animation: heart-pop 300ms ease-out; }
+.animate-heart-burst { animation: heart-burst 800ms ease-out forwards; }
+.animate-stamp { animation: stamp 1300ms ease-out forwards; }
+.animate-slide-up { animation: slide-up 220ms ease-out; }
+.animate-fade-in { animation: fade-in 150ms ease-out; }
+.animate-shimmer { animation: shimmer 1.4s ease-in-out infinite; }
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-heart-pop,
+  .animate-slide-up,
+  .animate-fade-in,
+  .animate-shimmer { animation: none; }
+  .animate-heart-burst,
+  .animate-stamp { animation-duration: 1ms; }
+}
+
+/* Hide scrollbars on horizontal thumbnail strips */
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { scrollbar-width: none; }
